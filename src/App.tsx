@@ -1,16 +1,13 @@
-import React, { useSyncExternalStore } from "react";
-import logo from "./logo.svg";
+import { useSyncExternalStore } from "react";
+//import logo from "./logo.svg";
 import "./App.css";
 import { AppState, appStore } from "./DB";
-import { ExternalStore } from "./pathStore";
+import { createStore } from "./pathStore";
 
-const aStore = new ExternalStore({ a: 1 });
+const aStore = createStore({ a: 1 });
 
 function A() {
-  const app = useSyncExternalStore(
-    (listener) => aStore.subscribe(listener),
-    () => aStore.getSnapshot(),
-  );
+  const app = useSyncExternalStore(aStore.subscribe, aStore.getSnapshot);
 
   console.log("A");
 
@@ -25,10 +22,7 @@ function A() {
 }
 
 function AA() {
-  const app = useSyncExternalStore(
-    (listener) => aStore.subscribe(listener),
-    () => aStore.getSnapshot(),
-  );
+  const app = useSyncExternalStore(aStore.subscribe, aStore.getSnapshot);
 
   console.log("AA");
 
@@ -42,13 +36,10 @@ function AA() {
   );
 }
 
-const bStore = new ExternalStore({ b: 1 });
+const bStore = createStore({ b: 1 });
 
 function B() {
-  const app = useSyncExternalStore(
-    (listener) => bStore.subscribe(listener),
-    () => bStore.getSnapshot(),
-  );
+  const app = useSyncExternalStore(bStore.subscribe, bStore.getSnapshot);
 
   console.log("B");
 
@@ -68,7 +59,6 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>

@@ -1,9 +1,9 @@
-export class ExternalStore<S> {
+class ExternalStore<S> {
   private listeners: Function[] = [];
   private state: S;
 
-  public constructor(state: S) {
-    this.state = state;
+  public constructor(private initState: S) {
+    this.state = { ...this.initState };
   }
 
   public subscribe(listener: Function) {
@@ -26,3 +26,12 @@ export class ExternalStore<S> {
     this.listeners.forEach((listener) => listener());
   }
 }
+
+export const createStore = <S>(state: S) => {
+  const store = new ExternalStore(state);
+  return {
+    subscribe: (listener: Function) => store.subscribe(listener),
+    getSnapshot: () => store.getSnapshot(),
+    update: (fn: (state: S) => S) => store.update(fn),
+  };
+};
