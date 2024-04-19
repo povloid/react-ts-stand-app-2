@@ -18,6 +18,11 @@ export const appStore = {
     emitChange();
   },
 
+  update(fn: (appState: AppState) => AppState) {
+    appState = fn(appState);
+    emitChange();
+  },
+
   subscribe(listener: Function) {
     listeners = [...listeners, listener];
     return () => {
@@ -31,7 +36,7 @@ export const appStore = {
 };
 
 function emitChange() {
-  for (let listener of listeners) {
+  for (const listener of listeners) {
     listener();
   }
 }

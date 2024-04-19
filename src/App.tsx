@@ -1,7 +1,7 @@
 import React, { useSyncExternalStore } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { appStore } from "./DB";
+import { AppState, appStore } from "./DB";
 
 function App() {
   const app = useSyncExternalStore(appStore.subscribe, appStore.getSnapshot);
@@ -22,7 +22,13 @@ function App() {
           Learn React
         </a>
         {app.a}
-        <button onClick={() => appStore.incA()}>INC</button>
+        <button
+          onClick={() =>
+            appStore.update((app: AppState) => ({ ...app, a: app.a + 1 }))
+          }
+        >
+          INC
+        </button>
       </header>
     </div>
   );
