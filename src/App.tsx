@@ -1,8 +1,11 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useSyncExternalStore } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { appStore } from "./DB";
 
 function App() {
+  const app = useSyncExternalStore(appStore.subscribe, appStore.getSnapshot);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -18,6 +21,8 @@ function App() {
         >
           Learn React
         </a>
+        {app.a}
+        <button onClick={() => appStore.incA()}>INC</button>
       </header>
     </div>
   );
