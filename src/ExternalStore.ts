@@ -1,5 +1,9 @@
 import { useSyncExternalStore } from "react";
 
+///////////////////////////////////////////////////////////////////////////////
+//                               External Store                              //
+///////////////////////////////////////////////////////////////////////////////
+
 export class ExternalStore<S> {
   private listeners: Function[] = [];
   private state: S;
@@ -34,6 +38,10 @@ export const useStore = <S>(store: ExternalStore<S>) => {
   const getSnapshot = () => store.getSnapshot();
   return useSyncExternalStore(subscribe, getSnapshot);
 };
+
+///////////////////////////////////////////////////////////////////////////////
+//                           External Store Cursor                           //
+///////////////////////////////////////////////////////////////////////////////
 
 export class ExternalStoreCursor<S, SS> {
   private listeners: Function[] = [];

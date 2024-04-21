@@ -1,4 +1,3 @@
-import { useSyncExternalStore } from "react";
 //import logo from "./logo.svg";
 import "./App.css";
 import {
@@ -6,7 +5,7 @@ import {
   appStoreForm1DescriptionCursor,
   appStoreForm1TitleCursor,
 } from "./AppState";
-import { ExternalStore, useStore, useStoreCursor } from "./ExternalStore";
+import { useStoreCursor } from "./ExternalStore";
 
 function Form1InputName() {
   const title = useStoreCursor(appStoreForm1TitleCursor);
