@@ -59,7 +59,7 @@ export const appStore = new ExternalStore<AppState>(appStateInit);
 export const appStoreForm1TitleCursor = new ExternalStoreCursor(
   appStore,
   (state) => state.form1.title,
-  (state: AppState, title: string) => ({
+  (state, title) => ({
     ...state,
     form1: { ...state.form1, title },
   }),
@@ -68,7 +68,7 @@ export const appStoreForm1TitleCursor = new ExternalStoreCursor(
 export const appStoreForm1DescriptionCursor = new ExternalStoreCursor(
   appStore,
   (state) => state.form1.description,
-  (state: AppState, description: string) => ({
+  (state, description) => ({
     ...state,
     form1: { ...state.form1, description },
   }),
