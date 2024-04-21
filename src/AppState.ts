@@ -29,7 +29,11 @@ export interface Table1 {
 }
 
 export const table1InitState: Table1 = {
-  items: [{ id: 0, name: "name 0", description: "..." }],
+  items: [
+    { id: 0, name: "name 0", description: "..." },
+    { id: 1, name: "name 1", description: "..." },
+    { id: 2, name: "name 2", description: "..." },
+  ],
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -73,3 +77,24 @@ export const appStoreForm1DescriptionCursor = new ExternalStoreCursor(
     form1: { ...state.form1, description },
   }),
 );
+
+export const appStoreTable1Cursor = new ExternalStoreCursor(
+  appStore,
+  (state) => state.table1,
+  (state, table) => ({ ...state, table }),
+);
+
+export const appStoreTable1ItemsCursor = (index: number) =>
+  new ExternalStoreCursor(
+    appStore,
+    (state) => state.table1.items[index],
+    (state, newItem) => ({
+      ...state,
+      table: {
+        ...state.table1,
+        items: state.table1.items.map((item, i) =>
+          i === index ? newItem : item,
+        ),
+      },
+    }),
+  );
