@@ -1,60 +1,47 @@
 import { useSyncExternalStore } from "react";
 //import logo from "./logo.svg";
 import "./App.css";
-import { AppState, appStore } from "./DB";
-import { createStore } from "./pathStore";
+import {
+  appStore,
+  appStoreForm1DescriptionCursor,
+  appStoreForm1TitleCursor,
+} from "./AppState";
+import { ExternalStore, useStore, useStoreCursor } from "./ExternalStore";
 
-const aStore = createStore({ a: 1 });
+function Form1InputName() {
+  const title = useStoreCursor(appStoreForm1TitleCursor);
 
-function A() {
-  const app = useSyncExternalStore(aStore.subscribe, aStore.getSnapshot);
+  console.log("title");
 
-  console.log("A");
-
-  const inc = () => aStore.update((s) => ({ ...s, a: s.a + 1 }));
+  const onChange = (e: { target: { value: string } }) =>
+    appStoreForm1TitleCursor.update(() => e.target.value).emitChange();
 
   return (
     <div>
-      {app.a}
-      <button onClick={inc}>INC</button>
+      <input value={title} onChange={onChange} />
     </div>
   );
 }
 
-function AA() {
-  const app = useSyncExternalStore(aStore.subscribe, aStore.getSnapshot);
+function Form1InputDescription() {
+  const description = useStoreCursor(appStoreForm1DescriptionCursor);
 
-  console.log("AA");
+  console.log("description");
 
-  const inc = () => aStore.update((s) => ({ ...s, a: s.a + 1 }));
-
-  return (
-    <div>
-      {app.a}
-      <button onClick={inc}>INC</button>
-    </div>
-  );
-}
-
-const bStore = createStore({ b: 1 });
-
-function B() {
-  const app = useSyncExternalStore(bStore.subscribe, bStore.getSnapshot);
-
-  console.log("B");
-
-  const inc = () => bStore.update((s) => ({ ...s, b: s.b + 1 }));
+  const onChange = (e: { target: { value: string } }) =>
+    appStoreForm1DescriptionCursor.update(() => e.target.value).emitChange();
 
   return (
     <div>
-      {app.b}
-      <button onClick={inc}>INC</button>
+      <input value={description} onChange={onChange} />
     </div>
   );
 }
 
 function App() {
-  const app = useSyncExternalStore(appStore.subscribe, appStore.getSnapshot);
+  console.log("App");
+
+  const logAppStore = () => console.log(appStore.getSnapshot());
 
   return (
     <div className="App">
@@ -70,17 +57,9 @@ function App() {
         >
           Learn React
         </a>
-        {app.a}
-        <button
-          onClick={() =>
-            appStore.update((app: AppState) => ({ ...app, a: app.a + 1 }))
-          }
-        >
-          INC
-        </button>
-        <A></A>
-        <AA></AA>
-        <B></B>
+        <Form1InputName />
+        <Form1InputDescription />
+        <button onClick={logAppStore}>LOG</button>
       </header>
     </div>
   );
