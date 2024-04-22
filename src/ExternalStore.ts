@@ -49,6 +49,7 @@ export class ExternalStoreCursor<S, SS> {
     private externalStore: ExternalStore<S>,
     private getSnapshotAt: (state: S) => SS,
     private updateAt: (state: S, subState: SS) => S,
+    private name?: string,
   ) {}
 
   public getSnapshot(): SS {
