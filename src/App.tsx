@@ -39,7 +39,7 @@ function Form1InputDescription() {
   );
 }
 
-function Table1Item_(props: { i: number }) {
+function Table1ItemComponent(props: { i: number }) {
   const i = props.i;
   const cursor = appStoreTable1ItemsCursor(i);
   const item = useStoreCursor(cursor);
@@ -47,15 +47,24 @@ function Table1Item_(props: { i: number }) {
   const incN = () =>
     cursor.update((item) => ({ ...item, n: item.n + 1 })).emitChange();
 
-  console.log("item", item.id);
+  console.log("item", item);
+
+  const delItem = () =>
+    appStoreTable1Cursor
+      .update((table) => ({
+        ...table,
+        items: table.items.filter((item_) => item_.id !== item.id),
+      }))
+      .emitChange();
 
   return (
-    <tr key={item.id}>
+    <tr>
       <td>{item.id}</td>
       <td>{item.name}</td>
       <td>{item.n}</td>
       <td>
         <button onClick={incN}>+</button>
+        <button onClick={delItem}>DEL</button>
       </td>
     </tr>
   );
@@ -64,16 +73,30 @@ function Table1Item_(props: { i: number }) {
 function Table1() {
   const table = useStoreCursor(appStoreTable1Cursor);
 
+  const addNewItem = () =>
+    appStoreTable1Cursor
+      .update((table) => ({
+        ...table,
+        items: [
+          ...table.items,
+          { id: table.items.length, name: "", description: "", n: 0 },
+        ],
+      }))
+      .emitChange();
+
   console.log("table");
 
   return (
-    <table>
-      <tbody>
-        {table.items.map((item) => (
-          <Table1Item_ i={item.id} />
-        ))}
-      </tbody>
-    </table>
+    <>
+      <table>
+        <tbody>
+          {table.items.map((item, i) => (
+            <Table1ItemComponent key={i} i={i} />
+          ))}
+        </tbody>
+      </table>
+      <button onClick={addNewItem}>ADD</button>
+    </>
   );
 }
 

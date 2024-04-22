@@ -82,7 +82,7 @@ export const appStoreForm1DescriptionCursor = new ExternalStoreCursor(
 export const appStoreTable1Cursor = new ExternalStoreCursor(
   appStore,
   (state) => state.table1,
-  (state, table) => ({ ...state, table }),
+  (state, table1) => ({ ...state, table1 }),
 );
 
 export const appStoreTable1ItemsCursor = (index: number) =>
@@ -90,14 +90,13 @@ export const appStoreTable1ItemsCursor = (index: number) =>
     appStore,
     (state) => state.table1.items[index],
     (state, newItem) => {
-      const items = state.table1.items.map((item, i) =>
-        i === index ? newItem : item,
-      );
       return {
         ...state,
         table1: {
           ...state.table1,
-          items,
+          items: state.table1.items.map((item, i) =>
+            i === index ? newItem : item,
+          ),
         },
       };
     },
