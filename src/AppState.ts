@@ -1,3 +1,4 @@
+import { inputInitState, InputState } from "./components/input/InputState";
 import { ExternalStore, ExternalStoreCursor } from "./ExternalStore";
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -46,6 +47,8 @@ export interface AppState {
   b: number;
   form1: Form1;
   table1: Table1;
+  input1: InputState;
+  input2: InputState;
 }
 
 export const appStateInit = {
@@ -53,6 +56,8 @@ export const appStateInit = {
   b: 0,
   form1: form1InitState,
   table1: table1InitState,
+  input1: inputInitState,
+  input2: inputInitState,
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -101,3 +106,21 @@ export const appStoreTable1ItemsCursor = (index: number) =>
       };
     },
   );
+
+export const appStoreInput1Cursor = new ExternalStoreCursor(
+  appStore,
+  (state) => state.input1,
+  (state, input1): AppState => ({
+    ...state,
+    input1,
+  }),
+);
+
+export const appStoreInput2Cursor = new ExternalStoreCursor(
+  appStore,
+  (state) => state.input2,
+  (state, input2): AppState => ({
+    ...state,
+    input2,
+  }),
+);

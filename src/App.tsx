@@ -4,9 +4,12 @@ import {
   appStore,
   appStoreForm1DescriptionCursor,
   appStoreForm1TitleCursor,
+  appStoreInput1Cursor,
+  appStoreInput2Cursor,
   appStoreTable1Cursor,
   appStoreTable1ItemsCursor,
 } from "./AppState";
+import { InputComponent } from "./components/input/InputComponent";
 import { useStoreCursor } from "./ExternalStore";
 
 function Form1InputName() {
@@ -122,6 +125,9 @@ function App() {
         <Form1InputName />
         <Form1InputDescription />
         <button onClick={logAppStore}>LOG</button>
+        <InputComponent cursor={appStoreInput1Cursor} />
+        <InputComponent cursor={appStoreInput1Cursor} />
+        <InputComponent cursor={appStoreInput2Cursor} />
         <Table1 />
       </header>
     </div>
