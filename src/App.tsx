@@ -1,4 +1,6 @@
 //import logo from "./logo.svg";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCoffee, faCheckSquare, faStar } from '@fortawesome/free-solid-svg-icons';
 import "./App.css";
 import {
   appStore,
@@ -142,6 +144,11 @@ function App() {
         </fieldset>
       </div>
       <Table1 />
+
+
+      <FontAwesomeIcon icon={faCoffee} />
+      <FontAwesomeIcon icon={faCheckSquare} />
+      <FontAwesomeIcon icon={faStar} />
     </div >
   );
 }
