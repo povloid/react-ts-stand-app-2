@@ -12,5 +12,5 @@ export const InputComponent = <S,>(props: {
   const onChange = (e: { target: { value: string } }) =>
     cursor.update((state) => inputSetValue(state, e.target.value)).emitChange();
 
-  return <input value={value} onChange={onChange} />;
+  return <input className="form-control" value={value} onChange={onChange} />;
 };

@@ -21,8 +21,8 @@ function Form1InputName() {
     appStoreForm1TitleCursor.update(() => e.target.value).emitChange();
 
   return (
-    <div>
-      <input value={title} onChange={onChange} />
+    <div className="mb-3">
+      <input className="form-control" value={title} onChange={onChange} />
     </div>
   );
 }
@@ -36,8 +36,8 @@ function Form1InputDescription() {
     appStoreForm1DescriptionCursor.update(() => e.target.value).emitChange();
 
   return (
-    <div>
-      <input value={description} onChange={onChange} />
+    <div className="mb-3">
+      <input className="form-control" value={description} onChange={onChange} />
     </div>
   );
 }
@@ -49,25 +49,33 @@ function Table1ItemComponent(props: { i: number }) {
 
   const incN = () =>
     cursor.update((item) => ({ ...item, n: item.n + 1 })).emitChange();
+  const decN = () =>
+    cursor.update((item) => ({ ...item, n: item.n - 1 })).emitChange();
 
   console.log("item", item);
 
-  const delItem = () =>
-    appStoreTable1Cursor
+  const delItem = () => {
+    console.log("delete id =", item.id)
+    return appStoreTable1Cursor
       .update((table) => ({
         ...table,
         items: table.items.filter((item_) => item_.id !== item.id),
       }))
       .emitChange();
+  }
 
   return (
     <tr>
-      <td>{item.id}</td>
+      <td width="10%">{item.id}</td>
       <td>{item.name}</td>
-      <td>{item.n}</td>
-      <td>
-        <button onClick={incN}>+</button>
-        <button onClick={delItem}>DEL</button>
+      <td width="10%">{item.n}</td>
+      <td width="20%">
+        <div className="btn-group">
+          <button type="button" className="btn btn-danger" onClick={incN}>+</button>
+          <button type="button" className="btn btn-primary" onClick={decN}>-</button>
+        </div>
+        {" "}
+        <button type="button" className="btn btn-warning" onClick={delItem}>DEL</button>
       </td>
     </tr>
   );
@@ -91,14 +99,14 @@ function Table1() {
 
   return (
     <>
-      <table>
+      <table className="table">
         <tbody>
           {table.items.map((item, i) => (
             <Table1ItemComponent key={i} i={i} />
           ))}
         </tbody>
       </table>
-      <button onClick={addNewItem}>ADD</button>
+      <button type="button" className="btn btn-primary" onClick={addNewItem}>ADD</button>
     </>
   );
 }
@@ -109,28 +117,32 @@ function App() {
   const logAppStore = () => console.log(appStore.getSnapshot());
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <Form1InputName />
-        <Form1InputDescription />
-        <button onClick={logAppStore}>LOG</button>
-        <InputComponent cursor={appStoreInput1Cursor} />
-        <InputComponent cursor={appStoreInput1Cursor} />
-        <InputComponent cursor={appStoreInput2Cursor} />
-        <Table1 />
-      </header>
-    </div>
+    <div className="App container">
+      <h1>Test</h1>
+      <div>
+        <fieldset>
+          <Form1InputName />
+          <Form1InputDescription />
+        </fieldset>
+      </div>
+      <div className="mb-3">
+        <button type="button" className="btn btn-primary" onClick={logAppStore}>LOG</button>
+      </div>
+      <div>
+        <fieldset>
+          <div className="mb-3">
+            <InputComponent cursor={appStoreInput1Cursor} />
+          </div>
+          <div className="mb-3">
+            <InputComponent cursor={appStoreInput1Cursor} />
+          </div>
+          <div className="mb-3">
+            <InputComponent cursor={appStoreInput2Cursor} />
+          </div>
+        </fieldset>
+      </div>
+      <Table1 />
+    </div >
   );
 }
 
