@@ -33,7 +33,7 @@ export class ExternalStore<S> {
   }
 }
 
-export const useStore = <S>(store: ExternalStore<S>) => {
+export const useExternalStore = <S>(store: ExternalStore<S>) => {
   const subscribe = (listener: Function) => store.subscribe(listener);
   const getSnapshot = () => store.getSnapshot();
   return useSyncExternalStore(subscribe, getSnapshot);
@@ -50,7 +50,7 @@ export class ExternalStoreCursor<S, SS> {
     private getSnapshotAt: (state: S) => SS,
     private updateAt: (state: S, subState: SS) => S,
     private name?: string,
-  ) {}
+  ) { }
 
   public getSnapshot(): SS {
     return this.getSnapshotAt(this.externalStore.getSnapshot());
@@ -75,7 +75,7 @@ export class ExternalStoreCursor<S, SS> {
   }
 }
 
-export const useStoreCursor = <S, SS>(store: ExternalStoreCursor<S, SS>) => {
+export const useExternalStoreCursor = <S, SS>(store: ExternalStoreCursor<S, SS>) => {
   const subscribe = (listener: Function) => store.subscribe(listener);
   const getSnapshot = () => store.getSnapshot();
   return useSyncExternalStore(subscribe, getSnapshot);

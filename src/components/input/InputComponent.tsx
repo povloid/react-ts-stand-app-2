@@ -1,11 +1,11 @@
-import { ExternalStoreCursor, useStoreCursor } from "../../ExternalStore";
+import { ExternalStoreCursor, useExternalStoreCursor } from "../../ExternalStore";
 import { inputSetValue, InputState, inputValue } from "./InputState";
 
 export const InputComponent = <S,>(props: {
   cursor: ExternalStoreCursor<S, InputState>;
 }) => {
   const { cursor } = props;
-  const state = useStoreCursor(cursor);
+  const state = useExternalStoreCursor(cursor);
 
   const value = inputValue(state);
 

@@ -10,10 +10,10 @@ import {
   appStoreTable1ItemsCursor,
 } from "./AppState";
 import { InputComponent } from "./components/input/InputComponent";
-import { useStoreCursor } from "./ExternalStore";
+import { useExternalStoreCursor } from "./ExternalStore";
 
 function Form1InputName() {
-  const title = useStoreCursor(appStoreForm1TitleCursor);
+  const title = useExternalStoreCursor(appStoreForm1TitleCursor);
 
   console.log("title");
 
@@ -28,7 +28,7 @@ function Form1InputName() {
 }
 
 function Form1InputDescription() {
-  const description = useStoreCursor(appStoreForm1DescriptionCursor);
+  const description = useExternalStoreCursor(appStoreForm1DescriptionCursor);
 
   console.log("description");
 
@@ -45,7 +45,7 @@ function Form1InputDescription() {
 function Table1ItemComponent(props: { i: number }) {
   const i = props.i;
   const cursor = appStoreTable1ItemsCursor(i);
-  const item = useStoreCursor(cursor);
+  const item = useExternalStoreCursor(cursor);
 
   const incN = () =>
     cursor.update((item) => ({ ...item, n: item.n + 1 })).emitChange();
@@ -74,7 +74,7 @@ function Table1ItemComponent(props: { i: number }) {
 }
 
 function Table1() {
-  const table = useStoreCursor(appStoreTable1Cursor);
+  const table = useExternalStoreCursor(appStoreTable1Cursor);
 
   const addNewItem = () =>
     appStoreTable1Cursor
