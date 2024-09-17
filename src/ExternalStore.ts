@@ -1,82 +1,112 @@
 import { useSyncExternalStore } from "react";
 
 ///////////////////////////////////////////////////////////////////////////////
+//                               Cursor                                      //
+///////////////////////////////////////////////////////////////////////////////
+
+
+export interface Cursor<S> {
+	getSnapshot(): S
+	update(fn: (state: S) => S): Cursor<S>
+	push(): void
+	subscribe(listener: Function): () => void
+	get<V>(fn: (state: S) => V): V
+	createCursorOn<K extends keyof S>(key: K): Cursor<S[K]>
+}
+
+export const useCursor = <S>(store: Cursor<S>) => {
+	const subscribe = (listener: Function) => store.subscribe(listener);
+	const getSnapshot = () => store.getSnapshot();
+	return useSyncExternalStore(subscribe, getSnapshot);
+};
+
+///////////////////////////////////////////////////////////////////////////////
 //                               External Store                              //
 ///////////////////////////////////////////////////////////////////////////////
 
-export class ExternalStore<S> {
-  private listeners: Function[] = [];
-  private state: S;
+export class ExternalStore<S> implements Cursor<S> {
+	private listeners: Function[] = [];
+	private state: S;
 
-  public constructor(private initState: S) {
-    this.state = { ...this.initState };
-  }
+	public constructor(private initState: S) {
+		this.state = { ...this.initState };
+	}
 
-  public subscribe(listener: Function) {
-    this.listeners = [...this.listeners, listener];
-    return () => {
-      this.listeners = this.listeners.filter((l) => l !== listener);
-    };
-  }
+	public subscribe(listener: Function) {
+		this.listeners = [...this.listeners, listener];
+		return () => {
+			this.listeners = this.listeners.filter((l) => l !== listener);
+		};
+	}
 
-  public getSnapshot() {
-    return this.state;
-  }
+	public getSnapshot() {
+		return this.state;
+	}
 
-  public update(fn: (state: S) => S) {
-    this.state = fn(this.state);
-    return this;
-  }
+	public get<V>(fn: (state: S) => V): V {
+		return fn(this.state);
+	}
 
-  public emitChange() {
-    this.listeners.forEach((listener) => listener());
-  }
+	public update(fn: (state: S) => S) {
+		this.state = fn(this.state);
+		return this;
+	}
+
+	public push() {
+		this.listeners.forEach((listener) => listener());
+	}
+
+	public createCursorOn<K extends keyof S>(key: K): Cursor<S[K]> {
+		return new ExternalStoreCursor(this,
+			(state) => state[key],
+			(state, newState) => ({ ...state, [key]: newState }))
+	}
 }
-
-export const useExternalStore = <S>(store: ExternalStore<S>) => {
-  const subscribe = (listener: Function) => store.subscribe(listener);
-  const getSnapshot = () => store.getSnapshot();
-  return useSyncExternalStore(subscribe, getSnapshot);
-};
 
 ///////////////////////////////////////////////////////////////////////////////
 //                           External Store Cursor                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-export class ExternalStoreCursor<S, SS> {
-  private listeners: Function[] = [];
-  public constructor(
-    private externalStore: ExternalStore<S>,
-    private getSnapshotAt: (state: S) => SS,
-    private updateAt: (state: S, subState: SS) => S,
-    private name?: string,
-  ) { }
+export class ExternalStoreCursor<S, SS> implements Cursor<SS> {
 
-  public getSnapshot(): SS {
-    return this.getSnapshotAt(this.externalStore.getSnapshot());
-  }
+	private listeners: Function[] = [];
 
-  public update(fn: (state: SS) => SS) {
-    this.externalStore.update((state) =>
-      this.updateAt(state, fn(this.getSnapshotAt(state))),
-    );
-    return this;
-  }
+	public constructor(
+		private readonly cursor: Cursor<S>,
+		private readonly getSnapshotAt: (state: S) => SS,
+		private readonly updateAt: (state: S, subState: SS) => S
+	) {
+	}
 
-  public subscribe(listener: Function) {
-    this.listeners = [...this.listeners, listener];
-    return () => {
-      this.listeners = this.listeners.filter((l) => l !== listener);
-    };
-  }
+	public getSnapshot(): SS {
+		return this.getSnapshotAt(this.cursor.getSnapshot());
+	}
 
-  public emitChange() {
-    this.listeners.forEach((listener) => listener());
-  }
+	public get<V>(fn: (state: SS) => V): V {
+		return fn(this.getSnapshotAt(this.cursor.getSnapshot()));
+	}
+
+	public update(fn: (state: SS) => SS) {
+		this.cursor.update((state) =>
+			this.updateAt(state, fn(this.getSnapshotAt(state))),
+		);
+		return this;
+	}
+
+	public subscribe(listener: Function) {
+		this.listeners = [...this.listeners, listener];
+		return () => {
+			this.listeners = this.listeners.filter((l) => l !== listener);
+		};
+	}
+
+	public push() {
+		this.listeners.forEach((listener) => listener());
+	}
+
+	public createCursorOn<K extends keyof SS>(key: K): Cursor<SS[K]> {
+		return new ExternalStoreCursor(this,
+			(state) => state[key],
+			(state, newState) => ({ ...state, [key]: newState }))
+	}
 }
-
-export const useExternalStoreCursor = <S, SS>(store: ExternalStoreCursor<S, SS>) => {
-  const subscribe = (listener: Function) => store.subscribe(listener);
-  const getSnapshot = () => store.getSnapshot();
-  return useSyncExternalStore(subscribe, getSnapshot);
-};
