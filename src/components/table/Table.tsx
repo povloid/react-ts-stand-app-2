@@ -1,4 +1,3 @@
-import { stat } from "fs"
 import { Cursor, ExternalStoreCursor, useCursor } from "../../ExternalStore"
 import { TableAppState } from "./TableAppState"
 
@@ -57,7 +56,7 @@ const createRenders = <T,>(cursor: Cursor<TableAppState<T>>, items: T[], ItemRen
 		new ExternalStoreCursor(
 			cursor,
 			(state) => state.items[i],
-			(state, newItem) => ({ ...state, items: state.items.map((item, ii) => ii === i ? newItem : item) })))
+			(state, newItem) => ({ ...state, items: state.items.slice().map((item, ii) => ii === i ? newItem : item) })))
 
 	return items.map((o, i) => {
 		return <ItemRender key={i} o={o} i={i} c={cc[i]} cc={cc} tc={cursor} />

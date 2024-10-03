@@ -1,7 +1,7 @@
 import { Fragment, ReactNode } from "react";
+import { Cursor, useCursor } from "../../ExternalStore";
 import { bootstrapType } from "../types";
 import { AlertsAppState, alertsDel } from "./AlertsAppState";
-import { Cursor, useCursor } from "../../ExternalStore";
 
 
 export const Alert = ({ type, children, onClose }: { type: bootstrapType, children?: ReactNode, onClose?: () => void }) => (

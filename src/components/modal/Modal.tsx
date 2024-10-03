@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react"
 import { Cursor, useCursor } from "../../ExternalStore"
-import { ModalAppState, modalHide } from "./ModalAppState"
-import { bootstrapType } from "../types"
+import { ModalAppState } from "./ModalAppState"
+
 
 
 // генератор уникальных идентификаторов
@@ -14,7 +14,7 @@ function generateNextModalId() {
 
 // хранилище уникальных идентификаторов
 
-const modalsIds = new Set<String>([])
+const modalsIds = new Set<string>([])
 
 // функции для добаление и удаления модальных идентификаторов
 
@@ -72,7 +72,7 @@ export const Modal = (props: {
 			className={show ? "modal fade show" : "modal fade"}
 			aria-hidden={!show}
 			aria-modal={show}
-			style={(show ? { display: "block" } : { display: "none" })}
+			style={(show ? { display: "block", backgroundColor: "rgba(0, 0, 0, 0.2)" } : { display: "none" })}
 			role={show ? "dialog" : undefined}
 		>
 			<div className={`modal-dialog ${size} ${centred}`}>
@@ -122,23 +122,3 @@ export const ModalFooter = (props: {
 	)
 }
 
-export const ModalFooterButton = (
-	{
-		children,
-		type,
-		onClick
-	}: {
-		type?: bootstrapType,
-		onClick?: () => void,
-		children?: ReactNode
-	}) => (
-	<button type="button"
-		className={"btn btn-" + (type || "secondary")}
-		data-bs-dismiss="modal"
-		onClick={(e) => {
-			e.stopPropagation()
-			if (onClick) onClick()
-		}}>
-		{children}
-	</button>
-)					

@@ -1,5 +1,6 @@
+import { HTMLInputAutoCompleteAttribute } from "react";
 import { Cursor, useCursor } from "../../ExternalStore";
-import { inputSetValue, InputAppState, inputValue } from "./InputAppState";
+import { InputAppState, inputSetValue, inputValue } from "./InputAppState";
 
 
 type InputTypeAttribute =
@@ -25,6 +26,7 @@ export const Input = (props: {
 	type?: InputTypeAttribute,
 	placeholder?: string;
 	cursor: Cursor<InputAppState>;
+	autoComplete?: HTMLInputAutoCompleteAttribute
 }) => {
 	const { cursor } = props;
 	const state = useCursor(cursor);
@@ -41,6 +43,7 @@ export const Input = (props: {
 			onChange={onChange}
 			type={props.type}
 			placeholder={props.placeholder}
+			autoComplete={props.autoComplete}
 		/>
 	)
 };

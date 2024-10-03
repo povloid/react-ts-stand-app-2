@@ -1,28 +1,25 @@
-export type NavbarDropdownMenuItemType  = "divider" | "item"
+export type NavbarDropdownMenuItemType = "divider" | "item"
 
-export interface NavbarDropdownMenuItem {
+export interface NavbarDropdownMenuItemState<T extends string> {
 	text?: string
-	href?: string
+	href?: T
 	type: NavbarDropdownMenuItemType
 }
 
 export type NavbarItemType = "item" | "dropdown"
 
-export interface NavbarItem {
+export interface NavbarItemState<T extends string> {
 	text: string
 	type: NavbarItemType
 	active?: boolean
 	href?: string
-	menu?: NavbarDropdownMenuItem[]
+	menu?: NavbarDropdownMenuItemState<T>[]
 }
 
-export interface NavbarAppState {
-  items: NavbarItem[];
-	rightItems: NavbarItem[];
+export interface NavbarAppState<T extends string> {
+	items: NavbarItemState<T>[];
+	rightItems: NavbarItemState<T>[];
 }
 
-export const navbaAppStateInit: NavbarAppState = {
-  items: [],
-	rightItems: []
-};
+
 
